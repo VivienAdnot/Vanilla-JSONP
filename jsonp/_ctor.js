@@ -4,7 +4,8 @@ Jsonp = function(options) {
         url: undefined,
         callback: Jsonp.Utilities.Defaults.noop,
         /* !mandatory */
-        urlParameters: undefined
+        urlParameters: undefined,
+        timeout: 2000
     };
 
     this.settings = {

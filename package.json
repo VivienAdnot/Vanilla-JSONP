@@ -1,19 +1,19 @@
 {
-  "name": "playtem.js",
+  "name": "vanillajsonp",
   "version": "1.0.0",
   "description": "",
   "main": "index.html",
   "scripts": {},
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Playtem/javascript-client.git"
+    "url": "git+https://github.com/VivienAdnot/Vanilla-JSONP"
   },
   "author": "Vivien Adnot",
-  "license": "Playtem",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Playtem/javascript-client/issues"
+    "url": "https://github.com/VivienAdnot/Vanilla-JSONP"
   },
-  "homepage": "https://github.com/Playtem/javascript-client#readme",
+  "homepage": "https://github.com/VivienAdnot/Vanilla-JSONP",
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-concat": "^0.5.1",
