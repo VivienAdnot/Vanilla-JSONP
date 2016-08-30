@@ -8,7 +8,7 @@ QUnit.test("init should success", function (assert) {
 
     };
     
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         url: url,
         callback: jsonpCallback,
         urlParameters: {
@@ -32,7 +32,7 @@ QUnit.test("init should fail", function (assert) {
 
     };
 
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         callback: jsonpCallback
     });
 

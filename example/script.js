@@ -2,16 +2,15 @@ var url = "https://api.github.com/users/VivienAdnot";
 
 var jsonpCallback = function(error, data) {
     if(error) {
-        $("#target").text(error);
+        document.getElementById("target").innerHTML = error;
     } else {
-        $(".prettyprint").text(JSON.stringify(data));
+        document.getElementById("target").innerHTML = JSON.stringify(data, undefined, 2);
     }
 };
 
-var jsonpInstance = new jsonp({
+var jsonpInstance = new Jsonp({
     url: url,
-    callback: jsonpCallback,
-    responseType: "json"
+    callback: jsonpCallback
 });
 
 jsonpInstance.execute();

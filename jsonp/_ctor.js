@@ -1,8 +1,8 @@
-jsonp = function(options) {
+Jsonp = function(options) {
     var defaults = {
         /* mandatory */
         url: undefined,
-        callback: jsonp.Utilities.defaults.noop,
+        callback: Jsonp.Utilities.Defaults.noop,
         /* !mandatory */
         urlParameters: undefined
     };
@@ -24,6 +24,6 @@ jsonp = function(options) {
 
     this.timeoutTimer = null;
 
-    jsonp.Utilities.extendObject(defaults, options);
-    jsonp.Utilities.extendObject(this.settings, defaults);
+    Jsonp.Utilities.extendObject(defaults, options);
+    Jsonp.Utilities.extendObject(this.settings, defaults);
 };

@@ -137,7 +137,7 @@ QUnit.test("extendObject", function (assert) {
         }
     };
     
-    var mergeResult = jsonp.Utilities.extendObject(source, dest);
+    var mergeResult = Jsonp.Utilities.extendObject(source, dest);
     assert.equal(_.isEqual(mergeResult, expectedResult), true, "merge source with dest ok");
 
     // invalid
@@ -153,10 +153,10 @@ QUnit.test("extendObject", function (assert) {
     var notEmptyObject1 = { test: "test" };
     var notEmptyObject2 = { prop: "prop" };
 
-    assert.equal(_.isEqual(jsonp.Utilities.extendObject(notEmptyObject1, undefined), notEmptyObject1), true, "notEmptyObject1 unchanged");
-    assert.equal(_.isEqual(jsonp.Utilities.extendObject(notEmptyObject1, undefined), notEmptyObject2), false, "notEmptyObject1 unchanged");
-    assert.equal(_.isEqual(jsonp.Utilities.extendObject(notEmptyObject1, null), notEmptyObject1), true, "notEmptyObject1 unchanged");
-    assert.equal(_.isEqual(jsonp.Utilities.extendObject(notEmptyObject1, {}), notEmptyObject1), true, "notEmptyObject1 unchanged");
+    assert.equal(_.isEqual(Jsonp.Utilities.extendObject(notEmptyObject1, undefined), notEmptyObject1), true, "notEmptyObject1 unchanged");
+    assert.equal(_.isEqual(Jsonp.Utilities.extendObject(notEmptyObject1, undefined), notEmptyObject2), false, "notEmptyObject1 unchanged");
+    assert.equal(_.isEqual(Jsonp.Utilities.extendObject(notEmptyObject1, null), notEmptyObject1), true, "notEmptyObject1 unchanged");
+    assert.equal(_.isEqual(Jsonp.Utilities.extendObject(notEmptyObject1, {}), notEmptyObject1), true, "notEmptyObject1 unchanged");
 });
 
 QUnit.module("jsonp");
@@ -169,7 +169,7 @@ QUnit.test("init should success", function (assert) {
 
     };
     
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         url: url,
         callback: jsonpCallback,
         urlParameters: {
@@ -193,7 +193,7 @@ QUnit.test("init should fail", function (assert) {
 
     };
 
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         callback: jsonpCallback
     });
 
@@ -210,7 +210,7 @@ QUnit.test("complete url", function (assert) {
 
     };
 
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         url: url,
         callback: jsonpCallback,
         urlParameters: {
@@ -235,7 +235,7 @@ QUnit.test("createOnSuccess should succeed", function (assert) {
         done();
     };
     
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         url: url,
         callback: jsonpCallback,
         urlParameters: {
@@ -260,7 +260,7 @@ QUnit.test("execute should succeed", function (assert) {
         done();
     };
     
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         url: url,
         callback: jsonpCallback,
         responseType: "json"
@@ -280,7 +280,7 @@ QUnit.test("execute should fail", function (assert) {
         done();
     };
     
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         url: url,
         callback: jsonpCallback,
         responseType: "json"
@@ -292,7 +292,7 @@ QUnit.test("execute should fail", function (assert) {
 QUnit.module("urlUtilities");
 
 // using
-var urlUtilities = jsonp.Utilities.Url;
+var urlUtilities = Jsonp.Utilities.Url;
 
 // utils
 var getTimeStamp = function () {

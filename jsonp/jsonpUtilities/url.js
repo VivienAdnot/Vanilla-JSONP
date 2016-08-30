@@ -1,4 +1,4 @@
-jsonp.Utilities.Url = {
+Jsonp.Utilities.Url = {
     separator: function (url) {
         return /\?/ .test( url ) ? "&" : "?";
     },
@@ -22,7 +22,7 @@ jsonp.Utilities.Url = {
         };
         var random = (new Date()).getTime();
 
-        jsonp.Utilities.extendObject(settings, options);
+        Jsonp.Utilities.extendObject(settings, options);
         var result = [];
 
         var addKeyValuePair = function (key, value) {

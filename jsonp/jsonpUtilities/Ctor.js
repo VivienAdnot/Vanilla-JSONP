@@ -1,1 +1,1 @@
-jsonp.Utilities = {};
+Jsonp.Utilities = {};

@@ -1,3 +1,3 @@
-jsonp.Utilities.defaults = {
+Jsonp.Utilities.Defaults = {
     noop: function () { }
 };

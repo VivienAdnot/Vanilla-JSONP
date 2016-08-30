@@ -10,7 +10,7 @@ QUnit.test("createOnSuccess should succeed", function (assert) {
         done();
     };
     
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         url: url,
         callback: jsonpCallback,
         urlParameters: {

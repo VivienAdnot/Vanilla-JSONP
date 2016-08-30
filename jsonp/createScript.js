@@ -1,4 +1,4 @@
-jsonp.prototype.createScript = function() {
+Jsonp.prototype.createScript = function() {
     var self = this;
 
     var script = document.createElement("script");

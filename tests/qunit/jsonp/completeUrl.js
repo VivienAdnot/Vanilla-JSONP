@@ -4,7 +4,7 @@ QUnit.test("complete url", function (assert) {
 
     };
 
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         url: url,
         callback: jsonpCallback,
         urlParameters: {

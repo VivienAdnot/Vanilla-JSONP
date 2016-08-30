@@ -9,7 +9,7 @@ QUnit.test("execute should succeed", function (assert) {
         done();
     };
     
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         url: url,
         callback: jsonpCallback,
         responseType: "json"
@@ -29,7 +29,7 @@ QUnit.test("execute should fail", function (assert) {
         done();
     };
     
-    var jsonpInstance = new jsonp({
+    var jsonpInstance = new Jsonp({
         url: url,
         callback: jsonpCallback,
         responseType: "json"

@@ -1,8 +1,8 @@
-jsonp = function(options) {
+Jsonp = function(options) {
     var defaults = {
         /* mandatory */
         url: undefined,
-        callback: jsonp.Utilities.defaults.noop,
+        callback: Jsonp.Utilities.Defaults.noop,
         /* !mandatory */
         urlParameters: undefined
     };
@@ -24,37 +24,37 @@ jsonp = function(options) {
 
     this.timeoutTimer = null;
 
-    jsonp.Utilities.extendObject(defaults, options);
-    jsonp.Utilities.extendObject(this.settings, defaults);
+    Jsonp.Utilities.extendObject(defaults, options);
+    Jsonp.Utilities.extendObject(this.settings, defaults);
 };
 
-jsonp.prototype.completeUrl = function () {
+Jsonp.prototype.completeUrl = function () {
     var self = this;
 
-    var queryString = jsonp.Utilities.Url.objectToQueryString(self.settings.urlParameters);
+    var queryString = Jsonp.Utilities.Url.objectToQueryString(self.settings.urlParameters);
 
     if (queryString.length > 0) {
-        self.settings.url = jsonp.Utilities.Url.join(self.settings.url, queryString)
+        self.settings.url = Jsonp.Utilities.Url.join(self.settings.url, queryString);
     };
 
-    self.settings.url = jsonp.Utilities.Url.addParameterWithSeparator(
+    self.settings.url = Jsonp.Utilities.Url.addParameterWithSeparator(
         self.settings.url,
         self.settings.jsonpCallbackTokenName,
         self.settings.jsonpCallbackName);
 };
 
-jsonp.prototype.createOnSuccess = function() {
+Jsonp.prototype.createOnSuccess = function() {
     var self = this;
 
     window[self.settings.jsonpCallbackName] = function (data) {
-        window[self.settings.jsonpCallbackName] = jsonp.Utilities.defaults.noop;
+        window[self.settings.jsonpCallbackName] = Jsonp.Utilities.Defaults.noop;
         window.clearTimeout(self.timeoutTimer);
 
         self.settings.callback(null, data);
     };
 };
 
-jsonp.prototype.createScript = function() {
+Jsonp.prototype.createScript = function() {
     var self = this;
 
     var script = document.createElement("script");
@@ -65,7 +65,7 @@ jsonp.prototype.createScript = function() {
     return script;
 };
 
-jsonp.prototype.execute = function() {
+Jsonp.prototype.execute = function() {
     var self = this;
 
     self.init(function(error, script) {
@@ -78,18 +78,18 @@ jsonp.prototype.execute = function() {
         self.createOnSuccess();
 
         self.timeoutTimer = window.setTimeout(function () {
-            window[self.settings.jsonpCallbackName] = jsonp.Utilities.defaults.noop;
+            window[self.settings.jsonpCallbackName] = Jsonp.Utilities.Defaults.noop;
             var errorMessage = self.settings.errorMessages.URL_TIMEOUT + self.settings.url;
 
             self.settings.callback(errorMessage, null);
         }, 2000);
 
-        var body = jsonp.Utilities.Dom.body();
+        var body = Jsonp.Utilities.Dom.body();
         body.appendChild(script);
     });
 };
 
-jsonp.prototype.init = function(callback) {
+Jsonp.prototype.init = function(callback) {
     var self = this;
 
     var validateMandatoryParameters = function () {
@@ -108,19 +108,19 @@ jsonp.prototype.init = function(callback) {
     callback(null, script);
 };
 
-jsonp.Utilities = {};
+Jsonp.Utilities = {};
 
-jsonp.Utilities.defaults = {
+Jsonp.Utilities.Defaults = {
     noop: function () { }
 };
 
-jsonp.Utilities.Dom = {
+Jsonp.Utilities.Dom = {
     body : function() {
         return document.getElementsByTagName("body")[0];
     }
 };
 
-jsonp.Utilities.extendObject = function (destination, source) {
+Jsonp.Utilities.extendObject = function (destination, source) {
     var expectedToStringCallWhenObject = Object.prototype.toString.call({});
 
     var isPropertyAnObject = function (property) {
@@ -146,7 +146,7 @@ jsonp.Utilities.extendObject = function (destination, source) {
     return destination;
 };
 
-jsonp.Utilities.Url = {
+Jsonp.Utilities.Url = {
     separator: function (url) {
         return /\?/ .test( url ) ? "&" : "?";
     },
@@ -170,7 +170,7 @@ jsonp.Utilities.Url = {
         };
         var random = (new Date()).getTime();
 
-        jsonp.Utilities.extendObject(settings, options);
+        Jsonp.Utilities.extendObject(settings, options);
         var result = [];
 
         var addKeyValuePair = function (key, value) {
