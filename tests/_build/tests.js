@@ -161,18 +161,8 @@ QUnit.test("extendObject", function (assert) {
 
 QUnit.module("jsonp");
 
-var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
-var jsonpCallback = function(error, success) {
-
-};
-
-var jsonp = new app.Framework.jsonp(url, jsonpCallback);
-
-// assert
-
 QUnit.test("init should success", function (assert) {
     var done = assert.async();
-    assert.expect(4);
 
     var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
     var jsonpCallback = function(error, success) {
@@ -197,7 +187,6 @@ QUnit.test("init should success", function (assert) {
 
 QUnit.test("init should fail", function (assert) {
     var done = assert.async();
-    assert.expect(4);
 
     var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
     var jsonpCallback = function(error, success) {
@@ -211,17 +200,9 @@ QUnit.test("init should fail", function (assert) {
     invalidjsonp1.init(function(error, data) {
         assert.ok(error != null);
         assert.ok(data == null);
+        done();
     });
 });
-
-var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
-var jsonpCallback = function(error, success) {
-
-};
-
-var jsonp = new app.Framework.jsonp(url, jsonpCallback);
-
-// assert
 
 QUnit.test("complete url", function (assert) {
     var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
@@ -240,6 +221,99 @@ QUnit.test("complete url", function (assert) {
 
     jsonp.completeUrl();
     assert.ok(jsonp.settings.url.startsWith(url + "?testA=1234&testB=5678"), jsonp.settings.url);
+});
+
+QUnit.test("createOnSuccess should succeed", function (assert) {
+    var done = assert.async();
+
+    var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
+    var success = "success";
+
+    var jsonpCallback = function(error, data) {
+        assert.ok(error == null);
+        assert.ok(data == success, data);
+        done();
+    };
+    
+    var validjsonp1 = new app.Framework.jsonp({
+        url: url,
+        callback: jsonpCallback,
+        urlParameters: {
+            testA: 1234,
+            testB: 5678
+        }
+    });
+
+    validjsonp1.createOnSuccess();
+
+    window[validjsonp1.settings.jsonpCallbackName](success);
+});
+
+QUnit.test("createOnSuccess should fail", function (assert) {
+    var done = assert.async();
+
+    var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
+    var success = "success";
+
+    var jsonpCallback = function(error, data) {
+        assert.ok(error != null, error);
+        assert.ok(data == null);
+        done();
+    };
+    
+    var validjsonp1 = new app.Framework.jsonp({
+        url: url,
+        callback: jsonpCallback,
+        urlParameters: {
+            testA: 1234,
+            testB: 5678
+        },
+        responseType: "json"
+    });
+
+    validjsonp1.createOnSuccess();
+
+    window[validjsonp1.settings.jsonpCallbackName]("WRONG_DATA");
+});
+
+QUnit.test("execute should succeed", function (assert) {
+    var done = assert.async();
+
+    var url = "https://api.github.com/users/VivienAdnot";
+
+    var jsonpCallback = function(error, data) {
+        assert.ok(error == null);
+        assert.ok(data != null, JSON.stringify(data));
+        done();
+    };
+    
+    var validjsonp1 = new app.Framework.jsonp({
+        url: url,
+        callback: jsonpCallback,
+        responseType: "json"
+    });
+
+    validjsonp1.execute();
+});
+
+QUnit.test("execute should fail", function (assert) {
+    var done = assert.async();
+
+    var url = "http://0.0.0.0";
+
+    var jsonpCallback = function(error, data) {
+        assert.ok(error != null, error);
+        assert.ok(data == null);
+        done();
+    };
+    
+    var validjsonp1 = new app.Framework.jsonp({
+        url: url,
+        callback: jsonpCallback,
+        responseType: "json"
+    });
+
+    validjsonp1.execute();
 });
 
 QUnit.module("urlUtilities");

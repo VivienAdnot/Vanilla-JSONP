@@ -44,8 +44,7 @@ app.Framework.jsonp = function(options) {
         url: undefined,
         callback: app.Framework.defaults.noop,
         /* !mandatory */
-        urlParameters: undefined,
-        responseType: "string" // available values: "string" or "jsonp"
+        urlParameters: undefined
     };
 
     this.settings = {
@@ -67,105 +66,86 @@ app.Framework.jsonp = function(options) {
 
     app.Framework.extendObject(defaults, options);
     app.Framework.extendObject(this.settings, defaults);
-}
+};
 
-app.Framework.jsonp.prototype = {
-    init: function(callback) {
-        var self = this;
+app.Framework.jsonp.prototype.completeUrl = function () {
+    var self = this;
 
-        var validateMandatoryParameters = function () {
-            return self.settings.url !== undefined;
-        };
+    var queryString = app.Framework.UrlUtilities.objectToQueryString(self.settings.urlParameters);
 
-        if (validateMandatoryParameters()) {
-            var errorMessage = self.settings.errorMessages.BAD_PARAMETERS;
-            callback(errorMessage, null);
+    if (queryString.length > 0) {
+        self.settings.url = app.Framework.UrlUtilities.join(self.settings.url, queryString)
+    };
+
+    self.settings.url = app.Framework.UrlUtilities.addParameterWithSeparator(
+        self.settings.url,
+        self.settings.jsonpCallbackTokenName,
+        self.settings.jsonpCallbackName);
+};
+
+app.Framework.jsonp.prototype.createOnSuccess = function() {
+    var self = this;
+
+    window[self.settings.jsonpCallbackName] = function (data) {
+        window[self.settings.jsonpCallbackName] = app.Framework.defaults.noop;
+        window.clearTimeout(self.timeoutTimer);
+
+        self.settings.callback(null, data);
+    };
+};
+
+app.Framework.jsonp.prototype.createScript = function() {
+    var self = this;
+
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.async = true;
+    script.src = self.settings.url;
+
+    return script;
+};
+
+app.Framework.jsonp.prototype.execute = function() {
+    var self = this;
+
+    self.init(function(error, script) {
+
+        if(error) {
+            self.settings.callback(error, null);
             return;
         }
 
-        self.completeUrl();
-        var script = self.createScript();
+        self.createOnSuccess();
 
-        callback(null, script);
-    },
+        self.timeoutTimer = window.setTimeout(function () {
+            window[self.settings.jsonpCallbackName] = app.Framework.defaults.noop;
+            var errorMessage = self.settings.errorMessages.URL_TIMEOUT + self.settings.url;
 
-    completeUrl : function () {
-        var self = this;
+            self.settings.callback(errorMessage, null);
+        }, 2000);
 
-        var queryString = app.Framework.UrlUtilities.objectToQueryString(self.settings.urlParameters);
+        var body = app.Framework.Dom.body();
+        body.appendChild(script);
+    });
+};
 
-        if (queryString.length > 0) {
-            self.settings.url = app.Framework.UrlUtilities.join(self.settings.url, queryString)
-        };
+app.Framework.jsonp.prototype.init = function(callback) {
+    var self = this;
 
-        self.settings.url = app.Framework.UrlUtilities.addParameterWithSeparator(
-            self.settings.url,
-            self.settings.jsonpCallbackTokenName,
-            self.settings.jsonpCallbackName);
-    },
+    var validateMandatoryParameters = function () {
+        return self.settings.url !== undefined;
+    };
 
-    createScript: function() {
-        var self = this;
-
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.async = true;
-        script.src = self.settings.url;
-
-        return script;
-    },
-
-    createOnSuccess: function(callback) {
-        var self = this;
-
-        var formatDataIfNecessary = function (data, callback) {
-            var formattedData = data;
-            if(self.settings.responseType == "string") {
-                callback(null, formattedData);
-                return;
-            }
-
-            if(self.settings.responseType === "json") {
-                try {
-                    formattedData = JSON.parse(data);
-                } catch(e) {
-                    callback("invalid object", null);
-                }
-            }
-        };
-
-        window[self.settings.jsonpCallbackName] = function (data) {
-            window[self.settings.jsonpCallbackName] = app.Framework.defaults.noop; //cancel the callback, todo test
-            window.clearTimeout(self.timeoutTimer);
-
-            var formattedData = formatDataIfNecessary(data, function(error, data) {
-                self.settings.callback(error, data);
-            });
-        };
-    },
-
-    execute: function() {
-        var self = this;
-
-        self.init(function(error, data) {
-
-            if(error) {
-                self.settings.callback(error, null);
-                return;
-            }
-
-            self.createOnSuccess();
-
-            self.timeoutTimer = window.setTimeout(function () {
-                window[self.settings.jsonpCallbackName] = app.Framework.defaults.noop;
-                var errorMessage = self.settings.errorMessages.URL_TIMEOUT + self.settings.url;
-
-                self.settings.callback(errorMessage, null, self.settings.callerCallback);
-            }, 2000);
-
-            app.Framework.Dom.body().appendChild(data.script);
-        });
+    if (!validateMandatoryParameters()) {
+        var errorMessage = self.settings.errorMessages.BAD_PARAMETERS;
+        callback(errorMessage, null);
+        return;
     }
+
+    self.completeUrl();
+    var script = self.createScript();
+
+    callback(null, script);
 };
 
 app.Framework.UrlUtilities = {

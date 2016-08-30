@@ -1,17 +1,7 @@
 QUnit.module("jsonp");
 
-var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
-var jsonpCallback = function(error, success) {
-
-};
-
-var jsonp = new app.Framework.jsonp(url, jsonpCallback);
-
-// assert
-
 QUnit.test("init should success", function (assert) {
     var done = assert.async();
-    assert.expect(2);
 
     var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
     var jsonpCallback = function(error, success) {
@@ -36,7 +26,6 @@ QUnit.test("init should success", function (assert) {
 
 QUnit.test("init should fail", function (assert) {
     var done = assert.async();
-    assert.expect(2);
 
     var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
     var jsonpCallback = function(error, success) {

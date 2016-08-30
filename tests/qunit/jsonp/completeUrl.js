@@ -1,12 +1,3 @@
-var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
-var jsonpCallback = function(error, success) {
-
-};
-
-var jsonp = new app.Framework.jsonp(url, jsonpCallback);
-
-// assert
-
 QUnit.test("complete url", function (assert) {
     var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
     var jsonpCallback = function(error, success) {
