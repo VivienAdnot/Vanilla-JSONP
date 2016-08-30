@@ -1,10 +1,10 @@
 module.exports = function (grunt) {
     var appName = "jsonp";
     var testsName = "tests";
+    var exampleName = "example";
     
     var build = {
         app: [
-            // appName + '*.js',
             appName + '/**/*.js'
         ],
         
@@ -34,7 +34,9 @@ module.exports = function (grunt) {
             },
             dispatchAppBuild: {
                 files: {
-                    '<%= testsName %>/_source/<%= appName %>.js': [path.app.build]
+                    '<%= testsName %>/_source/<%= appName %>.js': [path.app.build],
+                    '<%= exampleName %>/_source/<%= appName %>.js': [path.app.build],
+
                 }
             }
         },
@@ -60,7 +62,7 @@ module.exports = function (grunt) {
         connect: {
             server: {
                 options: {
-                    port: 4242,
+                    port: 4141,
                     hostname: '127.0.0.1',
                     keepalive: true
                 }
@@ -77,6 +79,7 @@ module.exports = function (grunt) {
         // common
         grunt.config('appName', appName);
         grunt.config('testsName', testsName);
+        grunt.config('exampleName', exampleName);
     });
 
     //=======================================================================
