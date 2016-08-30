@@ -1,106 +1,129 @@
-// app.Framework.jsonp = function(options) {
-//     var defaults = {
-//         /* mandatory */
-//         url: undefined,
-//         callback: __playtem.F.defaults.noop,
-//         /* !mandatory */
-//         urlParameters: undefined,
-//         responseType: "string" // available values: "string" or "jsonp"
-//     };
+app.Framework.jsonp = function(options) {
+    var defaults = {
+        /* mandatory */
+        url: undefined,
+        callback: app.Framework.defaults.noop,
+        /* !mandatory */
+        urlParameters: undefined,
+        responseType: "string" // available values: "string" or "jsonp"
+    };
 
-//     this.settings = {
-//         jsonpCallbackName: (function () {
-//             var random = (new Date()).getTime();
-//             return "jsonpcallback" + random;
-//         } ()),
+    this.settings = {
+        jsonpCallbackName: (function () {
+            var random = (new Date()).getTime();
+            return "jsonpcallback" + random;
+        } ()),
 
-//         jsonpCallbackTokenName: "callback",
+        jsonpCallbackTokenName: "callback",
 
-//         errorMessages: {
-//             BAD_PARAMETERS: "jsonp error: options must contain parameter: ",
-//             URL_LOAD_FAIL: "jsonp Fatal Error while loading url: ",
-//             URL_TIMEOUT: "jsonp timeout Error while loading url: "
-//         }
-//     };
+        errorMessages: {
+            BAD_PARAMETERS: "jsonp error: options must contain parameter url and callback",
+            URL_LOAD_FAIL: "jsonp Fatal Error while loading url: ",
+            URL_TIMEOUT: "jsonp timeout Error while loading url: "
+        }
+    };
 
-//     this.timeoutTimer = null;
+    this.timeoutTimer = null;
 
-//     __playtem.F.Tools.extendObject(defaults, options);
-//     __playtem.F.Tools.extendObject(this.settings, defaults);
-// }
+    app.Framework.extendObject(defaults, options);
+    app.Framework.extendObject(this.settings, defaults);
+}
 
-// playtemApp.Framework.requestProtocol.jsonp.prototype = {
-//     init: function(callback) {
-//         var self = this;
+app.Framework.jsonp.prototype = {
+    init: function(callback) {
+        var self = this;
 
-//         var validateMandatoryParameters = function () {
-//             return self.settings.url !== undefined && self.settings.callback.toString() !== __playtem.F.defaults.noop.toString();
-//         };
+        var validateMandatoryParameters = function () {
+            return self.settings.url !== undefined;
+        };
 
-//         var validateParametersResult = validateMandatoryParameters(options);
-//         if (validateParametersResult.status === false) {
-//             var errorMessage = settings.errorMessages.BAD_PARAMETERS + validateParametersResult.propertyNotFound;
-//             callback(errorMessage, null);
-//             return;
-//         }
+        if (validateMandatoryParameters()) {
+            var errorMessage = self.settings.errorMessages.BAD_PARAMETERS;
+            callback(errorMessage, null);
+            return;
+        }
 
-//         self.completeUrl();
-//         var script = createScript();
-//         self.createOnSuccessFunction();
+        self.completeUrl();
+        var script = self.createScript();
 
-//         callback(null, script);
-//     },
+        callback(null, script);
+    },
 
-//     completeUrl : function () {
-//         var self = this;
+    completeUrl : function () {
+        var self = this;
 
-//         var queryString = __playtem.F.requestUtilities.urlSetup.objectToQueryString(self.settings.urlParameters);
+        var queryString = app.Framework.UrlUtilities.objectToQueryString(self.settings.urlParameters);
 
-//         if (queryString.length > 0) {
-//             self.settings.url = __playtem.F.requestUtilities.urlSetup.join(self.settings.url, self.settings.urlParameters)
-//         };
+        if (queryString.length > 0) {
+            self.settings.url = app.Framework.UrlUtilities.join(self.settings.url, queryString)
+        };
 
-//         self.settings.url = __playtem.F.requestUtilities.urlSetup.addParameterWithSeparator(
-//             self.settings.url,
-//             self.settings.jsonpCallbackTokenName,
-//             self.settings.jsonpCallbackName);
-//     },
+        self.settings.url = app.Framework.UrlUtilities.addParameterWithSeparator(
+            self.settings.url,
+            self.settings.jsonpCallbackTokenName,
+            self.settings.jsonpCallbackName);
+    },
 
-//     createScript: function() {
-//         var self = this;
+    createScript: function() {
+        var self = this;
 
-//         var script = document.createElement("script");
-//         script.type = "text/javascript";
-//         script.async = true;
-//         script.src = self.settings.url;
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.async = true;
+        script.src = self.settings.url;
 
-//         return script;
-//     },
+        return script;
+    },
 
-//     createOnSuccessFunction(callback) {
-//         var self = this;
+    createOnSuccess: function(callback) {
+        var self = this;
 
-//         var formatDataIfNecessary = function (data) {
-//             var formattedData = (self.settings.responseType === "json") ? JSON.parse(data) : data; // try / catch
-//             return formattedData;
-//         };
+        var formatDataIfNecessary = function (data, callback) {
+            var formattedData = data;
+            if(self.settings.responseType == "string") {
+                callback(null, formattedData);
+                return;
+            }
 
-//         window[self.settings.jsonpCallbackName] = function (data) {
-//             window[self.settings.jsonpCallbackName] = __playtem.F.defaults.noop; //cancel the callback, todo test
-//             window.clearTimeout(self.timeoutTimer);
+            if(self.settings.responseType === "json") {
+                try {
+                    formattedData = JSON.parse(data);
+                } catch(e) {
+                    callback("invalid object", null);
+                }
+            }
+        };
 
-//             var formattedData = formatDataIfNecessary(data);
-//             callback(null, formattedData);
-//         };
-//     },
+        window[self.settings.jsonpCallbackName] = function (data) {
+            window[self.settings.jsonpCallbackName] = app.Framework.defaults.noop; //cancel the callback, todo test
+            window.clearTimeout(self.timeoutTimer);
 
-//     execute: function() {
-//         self.timeoutTimer = window.setTimeout(function () {
-//             window[self.settings.jsonpCallbackName] = __playtem.F.defaults.noop;
-//             var errorMessage = self.settings.errorMessages.URL_TIMEOUT + self.settings.url;
-//             self.settings.callback(errorMessage, null, self.settings.callerCallback);
-//         }, playtemApp.Settings.shared.ajax.httpRequestTimeout);
+            var formattedData = formatDataIfNecessary(data, function(error, data) {
+                self.settings.callback(error, data);
+            });
+        };
+    },
 
-//         __playtem.$body().appendChild(script);
-//     }
-// };
+    execute: function() {
+        var self = this;
+
+        self.init(function(error, data) {
+
+            if(error) {
+                self.settings.callback(error, null);
+                return;
+            }
+
+            self.createOnSuccess();
+
+            self.timeoutTimer = window.setTimeout(function () {
+                window[self.settings.jsonpCallbackName] = app.Framework.defaults.noop;
+                var errorMessage = self.settings.errorMessages.URL_TIMEOUT + self.settings.url;
+
+                self.settings.callback(errorMessage, null, self.settings.callerCallback);
+            }, 2000);
+
+            app.Framework.Dom.body().appendChild(data.script);
+        });
+    }
+};
