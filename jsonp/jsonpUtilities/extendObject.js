@@ -1,4 +1,4 @@
-app.Framework.extendObject = function (destination, source) {
+jsonp.Utilities.extendObject = function (destination, source) {
     var expectedToStringCallWhenObject = Object.prototype.toString.call({});
 
     var isPropertyAnObject = function (property) {

@@ -1,7 +1,7 @@
 QUnit.test("createOnSuccess should succeed", function (assert) {
     var done = assert.async();
 
-    var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
+    var url = "https://api.github.com/users/VivienAdnot";
     var success = "success";
 
     var jsonpCallback = function(error, data) {
@@ -10,7 +10,7 @@ QUnit.test("createOnSuccess should succeed", function (assert) {
         done();
     };
     
-    var validjsonp1 = new app.Framework.jsonp({
+    var jsonpInstance = new jsonp({
         url: url,
         callback: jsonpCallback,
         urlParameters: {
@@ -19,7 +19,7 @@ QUnit.test("createOnSuccess should succeed", function (assert) {
         }
     });
 
-    validjsonp1.createOnSuccess();
+    jsonpInstance.createOnSuccess();
 
-    window[validjsonp1.settings.jsonpCallbackName](success);
+    window[jsonpInstance.settings.jsonpCallbackName](success);
 });

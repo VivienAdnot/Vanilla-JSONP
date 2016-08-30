@@ -1,8 +1,8 @@
-app.Framework.jsonp = function(options) {
+jsonp = function(options) {
     var defaults = {
         /* mandatory */
         url: undefined,
-        callback: app.Framework.defaults.noop,
+        callback: jsonp.Utilities.defaults.noop,
         /* !mandatory */
         urlParameters: undefined
     };
@@ -24,6 +24,6 @@ app.Framework.jsonp = function(options) {
 
     this.timeoutTimer = null;
 
-    app.Framework.extendObject(defaults, options);
-    app.Framework.extendObject(this.settings, defaults);
+    jsonp.Utilities.extendObject(defaults, options);
+    jsonp.Utilities.extendObject(this.settings, defaults);
 };

@@ -1,4 +1,4 @@
-app.Framework.jsonp.prototype.init = function(callback) {
+jsonp.prototype.init = function(callback) {
     var self = this;
 
     var validateMandatoryParameters = function () {

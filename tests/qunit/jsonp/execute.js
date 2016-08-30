@@ -9,13 +9,13 @@ QUnit.test("execute should succeed", function (assert) {
         done();
     };
     
-    var validjsonp1 = new app.Framework.jsonp({
+    var jsonpInstance = new jsonp({
         url: url,
         callback: jsonpCallback,
         responseType: "json"
     });
 
-    validjsonp1.execute();
+    jsonpInstance.execute();
 });
 
 QUnit.test("execute should fail", function (assert) {
@@ -29,11 +29,11 @@ QUnit.test("execute should fail", function (assert) {
         done();
     };
     
-    var validjsonp1 = new app.Framework.jsonp({
+    var jsonpInstance = new jsonp({
         url: url,
         callback: jsonpCallback,
         responseType: "json"
     });
 
-    validjsonp1.execute();
+    jsonpInstance.execute();
 });

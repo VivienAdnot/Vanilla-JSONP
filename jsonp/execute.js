@@ -1,4 +1,4 @@
-app.Framework.jsonp.prototype.execute = function() {
+jsonp.prototype.execute = function() {
     var self = this;
 
     self.init(function(error, script) {
@@ -11,13 +11,13 @@ app.Framework.jsonp.prototype.execute = function() {
         self.createOnSuccess();
 
         self.timeoutTimer = window.setTimeout(function () {
-            window[self.settings.jsonpCallbackName] = app.Framework.defaults.noop;
+            window[self.settings.jsonpCallbackName] = jsonp.Utilities.defaults.noop;
             var errorMessage = self.settings.errorMessages.URL_TIMEOUT + self.settings.url;
 
             self.settings.callback(errorMessage, null);
         }, 2000);
 
-        var body = app.Framework.Dom.body();
+        var body = jsonp.Utilities.Dom.body();
         body.appendChild(script);
     });
 };

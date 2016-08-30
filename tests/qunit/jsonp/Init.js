@@ -3,12 +3,12 @@ QUnit.module("jsonp");
 QUnit.test("init should success", function (assert) {
     var done = assert.async();
 
-    var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
+    var url = "https://api.github.com/users/VivienAdnot";
     var jsonpCallback = function(error, success) {
 
     };
     
-    var validjsonp1 = new app.Framework.jsonp({
+    var jsonpInstance = new jsonp({
         url: url,
         callback: jsonpCallback,
         urlParameters: {
@@ -17,7 +17,7 @@ QUnit.test("init should success", function (assert) {
         }
     });
 
-    validjsonp1.init(function(error, data) {
+    jsonpInstance.init(function(error, data) {
         assert.ok(error == null);
         assert.ok(data != null);
         done();
@@ -27,16 +27,16 @@ QUnit.test("init should success", function (assert) {
 QUnit.test("init should fail", function (assert) {
     var done = assert.async();
 
-    var url = "https://cas.criteo.com/delivery/0.1/napi.jsonp";
+    var url = "https://api.github.com/users/VivienAdnot";
     var jsonpCallback = function(error, success) {
 
     };
 
-    var invalidjsonp1 = new app.Framework.jsonp({
+    var jsonpInstance = new jsonp({
         callback: jsonpCallback
     });
 
-    invalidjsonp1.init(function(error, data) {
+    jsonpInstance.init(function(error, data) {
         assert.ok(error != null);
         assert.ok(data == null);
         done();

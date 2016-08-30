@@ -1,7 +1,7 @@
 QUnit.module("urlUtilities");
 
 // using
-var urlUtilities = app.Framework.UrlUtilities;
+var urlUtilities = jsonp.Utilities.Url;
 
 // utils
 var getTimeStamp = function () {

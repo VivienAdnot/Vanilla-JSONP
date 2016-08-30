@@ -1,4 +1,4 @@
-app.Framework.Dom = {
+jsonp.Utilities.Dom = {
     body : function() {
         return document.getElementsByTagName("body")[0];
     }
