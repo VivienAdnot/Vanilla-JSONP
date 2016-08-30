@@ -4,7 +4,8 @@ Jsonp = function(options) {
         url: undefined,
         callback: Jsonp.Utilities.Defaults.noop,
         /* !mandatory */
-        urlParameters: undefined
+        urlParameters: undefined,
+        timeout: 2000
     };
 
     this.settings = {
@@ -82,7 +83,7 @@ Jsonp.prototype.execute = function() {
             var errorMessage = self.settings.errorMessages.URL_TIMEOUT + self.settings.url;
 
             self.settings.callback(errorMessage, null);
-        }, 2000);
+        }, self.settings.timeout);
 
         var body = Jsonp.Utilities.Dom.body();
         body.appendChild(script);
