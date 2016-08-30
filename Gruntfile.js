@@ -86,7 +86,6 @@ module.exports = function (grunt) {
     // unit tests
     //=======================================================================
 
-    //use playtem localhost url
     grunt.registerTask('default', [
         'loadEnv',
         // application
