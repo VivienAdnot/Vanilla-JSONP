@@ -1,6 +1,6 @@
 # Vanilla Jsonp
 
-A tiny lib to fetch remote data via the jsonp protocol
+A simple way to fetch remote data via the jsonp protocol
 
 ### Install Dependencies
 
